@@ -128,7 +128,7 @@ func (r *ReconcileHelloHttpService) Reconcile(request reconcile.Request) (reconc
 		return reconcile.Result{}, err
 	}
 
-	// Check if this Pod already exists
+	// Check if this ReplicaSet already exists
 	rsFound := &appsv1.ReplicaSet{}
 	err = r.client.Get(context.TODO(), types.NamespacedName{Name: rs.Name, Namespace: rs.Namespace}, rsFound)
 	if err != nil && errors.IsNotFound(err) {
