@@ -15,8 +15,7 @@ spec:
       serviceAccountName: k8s-hello-operator
       containers:
         - name: k8s-hello-operator
-          # Replace this with the built image name
-          image: REPLACE_IMAGE
+          image: raelga/hello-operator:latest
           command:
           - k8s-hello-operator
           imagePullPolicy: Always
@@ -31,3 +30,10 @@ spec:
                   fieldPath: metadata.name
             - name: OPERATOR_NAME
               value: "k8s-hello-operator"
+          resources:
+            requests:
+              cpu: 100m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 64Mi
