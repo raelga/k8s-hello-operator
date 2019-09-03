@@ -1,0 +1,7 @@
+apiVersion: hellohttp.rael.io/v1alpha1
+kind: HelloHttpService
+metadata:
+  name: example-hellohttpservice
+spec:
+  # Add fields here
+  size: 3
