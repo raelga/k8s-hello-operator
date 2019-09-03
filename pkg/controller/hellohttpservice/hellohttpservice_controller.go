@@ -99,6 +99,27 @@ func (r *ReconcileHelloHttpService) Reconcile(request reconcile.Request) (reconc
 		return reconcile.Result{}, err
 	}
 
+	// // Define a new ConfigMap object
+	// cm := newConfigMapForCR(instance)
+
+	// // Check if this ConfigMap already exists
+	// configMapFound := &corev1.ConfigMap{}
+	// err = r.client.Get(context.TODO(), types.NamespacedName{Name: cm.Name, Namespace: cm.Namespace}, configMapFound)
+	// if err != nil && errors.IsNotFound(err) {
+	// 	reqLogger.Info("Creating a new ConfigMap", "ConfigMap.Namespace", cm.Namespace, "ConfigMap.Name", cm.Name)
+	// 	err = r.client.Create(context.TODO(), cm)
+	// 	if err != nil {
+	// 		return reconcile.Result{}, err
+	// 	}
+
+	// 	// ConfigMap created successfully - don't requeue
+	// 	return reconcile.Result{}, nil
+	// } else if err != nil {
+	// 	return reconcile.Result{}, err
+	// }
+
+	// // ConfigMap already exists - don't requeue
+	// reqLogger.Info("Skip reconcile: ConfigMap already exists", "ConfigMap.Namespace", configMapFound.Namespace, "ConfigMap.Name", configMapFound.Name)
 
 	rs := newReplicaSetCR(instance)
 
@@ -128,6 +149,20 @@ func (r *ReconcileHelloHttpService) Reconcile(request reconcile.Request) (reconc
 	return reconcile.Result{}, nil
 }
 
+// newConfigMapForCR returns a hello-http config map with the same name/namespace as the cr
+// func newConfigMapForCR(cr *hellohttpv1alpha1.HelloHttpService) *corev1.ConfigMap {
+// 	labels := map[string]string{
+// 		"app": cr.Name,
+// 	}
+// 	return &corev1.ConfigMap{
+// 		ObjectMeta: metav1.ObjectMeta{
+// 			Name:      cr.Name + "-cmd",
+// 			Namespace: cr.Namespace,
+// 			Labels:    labels,
+// 		},
+// 		Data: map[string]string{"HELLO_NAME": cr.Spec.Subject},
+// 	}
+// }
 
 // newReplicaSetCR returns a hello-http rs with the same name/namespace as the cr
 func newReplicaSetCR(cr *hellohttpv1alpha1.HelloHttpService) *appsv1.ReplicaSet {
@@ -146,22 +181,22 @@ func newReplicaSetCR(cr *hellohttpv1alpha1.HelloHttpService) *appsv1.ReplicaSet 
 				MatchLabels: labels,
 			},
 			Template: corev1.PodTemplateSpec{
-		ObjectMeta: metav1.ObjectMeta{
-			Name:      cr.Name + "-pod",
-			Namespace: cr.Namespace,
-			Labels:    labels,
-		},
-		Spec: corev1.PodSpec{
-			Containers: []corev1.Container{
-				{
-					Name:  "app",
-					Image: "raelga/hello-http:latest",
-					Env: []corev1.EnvVar{
-						{Name: "HELLO_NAME", Value: cr.Spec.Subject},
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      cr.Name + "-pod",
+					Namespace: cr.Namespace,
+					Labels:    labels,
+				},
+				Spec: corev1.PodSpec{
+					Containers: []corev1.Container{
+						{
+							Name:  "app",
+							Image: "raelga/hello-http:latest",
+							Env: []corev1.EnvVar{
+								{Name: "HELLO_NAME", Value: cr.Spec.Subject},
+							},
+						},
 					},
 				},
-			},
-		},
 			},
 		},
 	}
