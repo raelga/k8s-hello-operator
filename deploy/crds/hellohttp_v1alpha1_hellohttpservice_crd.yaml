@@ -9,6 +9,7 @@ spec:
     listKind: HelloHttpServiceList
     plural: hellohttpservices
     singular: hellohttpservice
+    shortNames: [ hhs ]
   scope: Namespaced
   subresources:
     status: {}
