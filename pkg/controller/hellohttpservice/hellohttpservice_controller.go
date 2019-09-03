@@ -100,7 +100,7 @@ func (r *ReconcileHelloHttpService) Reconcile(request reconcile.Request) (reconc
 		return reconcile.Result{}, err
 	}
 
-	// Define a new Pod object
+
 	pod := newPodForCR(instance)
 
 	// Set HelloHttpService instance as the owner and controller
@@ -109,8 +109,8 @@ func (r *ReconcileHelloHttpService) Reconcile(request reconcile.Request) (reconc
 	}
 
 	// Check if this Pod already exists
-	found := &corev1.Pod{}
-	err = r.client.Get(context.TODO(), types.NamespacedName{Name: pod.Name, Namespace: pod.Namespace}, found)
+	podFound := &corev1.Pod{}
+	err = r.client.Get(context.TODO(), types.NamespacedName{Name: pod.Name, Namespace: pod.Namespace}, podFound)
 	if err != nil && errors.IsNotFound(err) {
 		reqLogger.Info("Creating a new Pod", "Pod.Namespace", pod.Namespace, "Pod.Name", pod.Name)
 		err = r.client.Create(context.TODO(), pod)
@@ -125,7 +125,7 @@ func (r *ReconcileHelloHttpService) Reconcile(request reconcile.Request) (reconc
 	}
 
 	// Pod already exists - don't requeue
-	reqLogger.Info("Skip reconcile: Pod already exists", "Pod.Namespace", found.Namespace, "Pod.Name", found.Name)
+	reqLogger.Info("Skip reconcile: Pod already exists", "Pod.Namespace", podFound.Namespace, "Pod.Name", podFound.Name)
 	return reconcile.Result{}, nil
 }
 
@@ -143,9 +143,11 @@ func newPodForCR(cr *hellohttpv1alpha1.HelloHttpService) *corev1.Pod {
 		Spec: corev1.PodSpec{
 			Containers: []corev1.Container{
 				{
-					Name:    "busybox",
-					Image:   "busybox",
-					Command: []string{"sleep", "3600"},
+					Name:  "app",
+					Image: "raelga/hello-http:latest",
+					Env: []corev1.EnvVar{
+						{Name: "HELLO_NAME", Value: cr.Spec.Subject},
+					},
 				},
 			},
 		},
