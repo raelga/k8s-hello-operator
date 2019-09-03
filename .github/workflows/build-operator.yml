@@ -23,4 +23,4 @@ jobs:
       uses: actions/checkout@v1
 
     - name: Build
-      run: $(go env GOPATH)/operator-sdk build raelga/hello-operator
+      run: $(go env GOPATH)/bin/operator-sdk build raelga/hello-operator
