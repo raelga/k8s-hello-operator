@@ -14,6 +14,7 @@ type HelloHttpServiceSpec struct {
 	// Important: Run "operator-sdk generate k8s" to regenerate code after modifying this file
 	// Add custom validation using kubebuilder tags: https://book-v1.book.kubebuilder.io/beyond_basics/generating_crd.html
 	Subject string `json:"subject,omitempty"`
+	Size    *int32 `json:"replicas,omitempty" protobuf:"varint,1,opt,name=replicas"`
 }
 
 // HelloHttpServiceStatus defines the observed state of HelloHttpService
