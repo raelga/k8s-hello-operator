@@ -3,5 +3,5 @@ kind: HelloHttpService
 metadata:
   name: example-hellohttpservice
 spec:
-  # Add fields here
-  size: 3
+
+  subject: "Rael"
