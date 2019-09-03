@@ -1,6 +1,7 @@
 module github.com/raelga/k8s-hello-operator
 
 require (
+	github.com/NYTimes/gziphandler v1.0.1 // indirect
 	github.com/go-openapi/spec v0.19.0
 	github.com/operator-framework/operator-sdk v0.10.1-0.20190903154308-019ee12071ea
 	github.com/spf13/pflag v1.0.3
